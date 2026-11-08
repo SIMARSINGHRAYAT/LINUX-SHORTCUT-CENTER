@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge&labelColor=0d1117" alt="License" /></a>
-  <a href="https://linuxdesktopapps11.vercel.app/"><img src="https://img.shields.io/badge/Deployed-Live-0ea5e9?style=for-the-badge&logo=vercel&labelColor=0d1117" alt="Deployed" /></a>
+  <a href="https://linux-shortcut-center.vercel.app/"><img src="https://img.shields.io/badge/Deployed-Live-0ea5e9?style=for-the-badge&logo=vercel&labelColor=0d1117" alt="Deployed" /></a>
   <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/pulls"><img src="https://img.shields.io/badge/Contributions-Welcome-22c55e?style=for-the-badge&labelColor=0d1117" alt="Contributions Welcome" /></a>
   <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center"><img src="https://img.shields.io/github/stars/SIMARSINGHRAYAT/Linux-Shortcut-Center?style=for-the-badge&logo=github&color=eab308&labelColor=0d1117" alt="Stars" /></a>
   <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/network/members"><img src="https://img.shields.io/github/forks/SIMARSINGHRAYAT/Linux-Shortcut-Center?style=for-the-badge&logo=github&color=8b5cf6&labelColor=0d1117" alt="Forks" /></a>

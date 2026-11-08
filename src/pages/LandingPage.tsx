@@ -41,7 +41,7 @@ export function LandingPage() {
           transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
         >
           <Link
-            to="/dashboard"
+            to="/signin"
             className="transparent-get-started-btn group inline-flex items-center gap-3 px-8 py-3.5 rounded-xl font-medium tracking-wide transition-all duration-300"
           >
             <span className="chrome-btn-text text-base">Get Started</span>

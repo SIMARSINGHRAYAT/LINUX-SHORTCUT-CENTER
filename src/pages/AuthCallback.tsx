@@ -44,7 +44,10 @@ export function AuthCallback() {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          body: JSON.stringify({ code: authCode }),
+          body: JSON.stringify({
+            code: authCode,
+            redirect_uri: `${window.location.origin}/auth/callback`,
+          }),
         });
 
         const data = await response.json();
@@ -57,12 +60,10 @@ export function AuthCallback() {
         setStatus("success");
         showToast(`Welcome, @${data.user.login}! GitHub connected.`);
 
-        // Redirect back to original destination after brief delay
+        // Redirect directly to the Help & Support page
         setTimeout(() => {
-          const returnUrl = sessionStorage.getItem("lsc_auth_return_url") || "/dashboard";
-          sessionStorage.removeItem("lsc_auth_return_url");
-          navigate(returnUrl, { replace: true });
-        }, 1200);
+          navigate("/support", { replace: true });
+        }, 1000);
       } catch (err: any) {
         console.error("Auth callback error:", err);
         setStatus("error");
@@ -89,9 +90,7 @@ export function AuthCallback() {
     };
     setUserSession(demoUser, "demo_github_token_authenticated");
     showToast("Signed in with Demo GitHub Account!");
-    const returnUrl = sessionStorage.getItem("lsc_auth_return_url") || "/dashboard";
-    sessionStorage.removeItem("lsc_auth_return_url");
-    navigate(returnUrl, { replace: true });
+    navigate("/support", { replace: true });
   };
 
   return (

@@ -45,17 +45,24 @@ export default async function handler(req: any, res: any) {
 
   try {
     // 1. Exchange temporary code for access token
+    const tokenPayload: Record<string, string> = {
+      client_id: clientId,
+      client_secret: clientSecret,
+      code,
+    };
+
+    const redirectUri = req.body?.redirect_uri || req.query?.redirect_uri;
+    if (redirectUri) {
+      tokenPayload.redirect_uri = redirectUri;
+    }
+
     const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        code,
-      }),
+      body: JSON.stringify(tokenPayload),
     });
 
     const tokenData = await tokenResponse.json();

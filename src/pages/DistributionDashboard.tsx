@@ -15,7 +15,7 @@ export function DistributionDashboard() {
     <div className="page-container distribution-page py-10 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Back button */}
       <div>
-        <Link to="/" className="back-btn group">
+        <Link to="/support" className="back-btn group">
           <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-1" />
           <span>Back</span>
         </Link>

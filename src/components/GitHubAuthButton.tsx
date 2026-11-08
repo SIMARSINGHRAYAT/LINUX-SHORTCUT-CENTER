@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { LogOut, ExternalLink, ShieldCheck, ChevronDown } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { GitHubLogo } from "./OfficialLogos";
 
 export function GitHubAuthButton() {
+  const location = useLocation();
   const { user, loginWithGitHub, logout, isLoading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -18,6 +20,16 @@ export function GitHubAuthButton() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Do not show on landing page, signin page, support page, or auth callback page
+  if (
+    location.pathname === "/" ||
+    location.pathname === "/signin" ||
+    location.pathname === "/support" ||
+    location.pathname === "/auth/callback"
+  ) {
+    return null;
+  }
 
   if (isLoading) {
     return null;

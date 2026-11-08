@@ -10,6 +10,8 @@ import { DebianDashboard } from "./pages/DebianDashboard";
 import { DistributionDashboard } from "./pages/DistributionDashboard";
 import { InstallationGuide } from "./pages/InstallationGuide";
 import { LandingPage } from "./pages/LandingPage";
+import { SignInPage } from "./pages/SignInPage";
+import { SupportPage } from "./pages/SupportPage";
 import { AILibrary } from "./pages/AILibrary";
 import { AIGuide } from "./pages/AIGuide";
 import { AuthCallback } from "./pages/AuthCallback";
@@ -54,6 +56,8 @@ function Application() {
           >
             <Routes location={location}>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/signin" element={<SignInPage />} />
+              <Route path="/support" element={<SupportPage />} />
               <Route path="/dashboard" element={<DistributionDashboard />} />
               <Route path="/dashboard/debian" element={<DebianDashboard />} />
               <Route path="/dashboard/debian/browsers" element={<BrowserLibrary />} />

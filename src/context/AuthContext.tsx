@@ -16,6 +16,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   loginWithGitHub: () => void;
+  demoLogin: () => void;
   logout: () => void;
   setUserSession: (user: GitHubUser, token: string) => void;
   isConfigured: boolean;
@@ -64,12 +65,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(STORAGE_TOKEN_KEY);
   };
 
+  const demoLogin = () => {
+    const sampleUser: GitHubUser = {
+      id: 10000001,
+      login: "simarsinghrayat",
+      name: "Simar Singh Rayat",
+      avatar_url: "https://avatars.githubusercontent.com/u/10000000?v=4",
+      html_url: "https://github.com/SIMARSINGHRAYAT",
+      bio: "Creator of Linux Shortcut Center & KilzSnippet",
+      public_repos: 14,
+      followers: 85,
+    };
+    setUserSession(sampleUser, "demo_authenticated_token");
+  };
+
   const loginWithGitHub = () => {
-    // Current redirect callback URI
     const redirectUri = `${window.location.origin}/auth/callback`;
-    
-    // Store current path so callback can return user to where they were
-    sessionStorage.setItem("lsc_auth_return_url", window.location.pathname);
+    sessionStorage.setItem("lsc_auth_return_url", "/support");
 
     if (clientId) {
       const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(
@@ -77,8 +89,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       )}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=read:user,user:email`;
       window.location.href = authUrl;
     } else {
-      // If client ID is not set yet in environment variables, redirect to the callback page with instructions
-      window.location.href = `/auth/callback?error=unconfigured`;
+      // Use Vercel Serverless Function which securely accesses GITHUB_CLIENT_ID
+      window.location.href = `/api/auth/login`;
     }
   };
 
@@ -89,6 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token,
         isLoading,
         loginWithGitHub,
+        demoLogin,
         logout,
         setUserSession,
         isConfigured,
@@ -107,4 +120,3 @@ export function useAuth() {
   }
   return context;
 }
-
