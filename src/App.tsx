@@ -1,58 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { CommandSearch } from "./components/CommandSearch";
-import { SiteFooter, SiteHeader, type ThemeMode } from "./components/SiteShell";
 import { ToastProvider } from "./components/ToastProvider";
-import { usePersistentState } from "./hooks/usePersistentState";
+import { BackgroundGlow } from "./components/BackgroundGlow";
 import { BrowserLibrary } from "./pages/BrowserLibrary";
 import { DebianDashboard } from "./pages/DebianDashboard";
 import { DistributionDashboard } from "./pages/DistributionDashboard";
 import { InstallationGuide } from "./pages/InstallationGuide";
 import { LandingPage } from "./pages/LandingPage";
+import { AILibrary } from "./pages/AILibrary";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { DebianWorkspace } from "./layouts/DebianWorkspace";
 
 function Application() {
   const location = useLocation();
-  const [theme, setTheme] = usePersistentState<ThemeMode>("shortcut-theme", "dark");
-  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
+    document.documentElement.setAttribute("data-theme", "dark");
+  }, []);
 
   useEffect(() => {
     if (location.hash) {
       const targetId = decodeURIComponent(location.hash.slice(1));
-      window.requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" }));
+      window.requestAnimationFrame(() =>
+        document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" })
+      );
     } else {
       window.scrollTo(0, 0);
     }
   }, [location.pathname, location.hash]);
 
-  useEffect(() => {
-    const handleShortcut = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setSearchOpen(true);
-      }
-    };
-    window.addEventListener("keydown", handleShortcut);
-    return () => window.removeEventListener("keydown", handleShortcut);
-  }, []);
-
   return (
-    <div className="app-shell">
-      <SiteHeader
-        onSearch={() => setSearchOpen(true)}
-        theme={theme}
-        onToggleTheme={() => setTheme((current) => current === "dark" ? "light" : "dark")}
-      />
-      <main id="main-content" className="site-main">
+    <div className="app-shell relative min-h-screen bg-black text-slate-100 overflow-x-hidden selection:bg-purple-500/30 selection:text-white">
+      {/* Universal Background: Full black contrast with grid and glossy professional colors */}
+      <BackgroundGlow />
+
+      {/* Main Content Area without any top header or sidebar */}
+      <main id="main-content" className="site-main relative z-10 min-h-screen flex flex-col justify-start">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            className="route-frame"
+            className="route-frame flex-1"
             key={location.pathname}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -62,19 +48,15 @@ function Application() {
             <Routes location={location}>
               <Route path="/" element={<LandingPage />} />
               <Route path="/dashboard" element={<DistributionDashboard />} />
-              <Route
-                path="/dashboard/debian"
-                element={<DebianWorkspace activeCategory="overview"><DebianDashboard /></DebianWorkspace>}
-              />
+              <Route path="/dashboard/debian" element={<DebianDashboard />} />
               <Route path="/dashboard/debian/browsers" element={<BrowserLibrary />} />
               <Route path="/dashboard/debian/browsers/:browserSlug" element={<InstallationGuide />} />
+              <Route path="/dashboard/debian/ai" element={<AILibrary />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
       </main>
-      <SiteFooter />
-      <CommandSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }

@@ -1,15 +1,12 @@
 import { useEffect } from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight, Check, CircleAlert, ClipboardCheck, Copy, RotateCcw, ShieldCheck, Star } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Check, CircleAlert, ClipboardCheck, RotateCcw, ShieldCheck, Star } from "lucide-react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { BrandLogo } from "../components/Brand";
-import { Breadcrumbs } from "../components/Breadcrumbs";
 import { TerminalBlock } from "../components/TerminalBlock";
 import { useClipboard } from "../hooks/useClipboard";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { usePersistentState } from "../hooks/usePersistentState";
 import { browsers } from "../data/browsers";
-import { DebianWorkspace } from "../layouts/DebianWorkspace";
 import { useToast } from "../components/ToastProvider";
 
 export function InstallationGuide() {
@@ -18,12 +15,12 @@ export function InstallationGuide() {
   const [favorites, setFavorites] = usePersistentState<string[]>("shortcut-favorite-guides", []);
   const [, setRecent] = usePersistentState<string[]>("shortcut-recent-guides", []);
   const [completed, setCompleted] = usePersistentState<Record<string, boolean>>(`shortcut-checklist-${browserSlug}`, {});
-  const { copy, copied } = useClipboard();
+  const { copy } = useClipboard();
   const { showToast } = useToast();
 
   usePageMeta(
     guide ? `Install ${guide.name} on Debian` : "Installation guide not found",
-    guide ? `${guide.description} Follow Debian compatibility notes and copy each official installation command step by step.` : "Choose an available Debian installation guide from the browser library.",
+    guide ? `${guide.description} Follow Debian compatibility notes and copy each official installation command step by step.` : "Choose an available Debian installation guide from the browser library."
   );
 
   useEffect(() => {
@@ -54,164 +51,188 @@ export function InstallationGuide() {
   };
 
   return (
-    <DebianWorkspace activeCategory="browsers">
-      <div className="dashboard-page guide-page">
-        <Breadcrumbs items={[
-          { label: "Dashboard", to: "/dashboard" },
-          { label: "Debian", to: "/dashboard/debian" },
-          { label: "Browsers", to: "/dashboard/debian/browsers" },
-          { label: guide.shortName },
-        ]} />
+    <div className="page-container guide-page py-10 px-4 sm:px-6 max-w-5xl mx-auto">
+      {/* Back button */}
+      <div>
+        <Link to="/dashboard/debian/browsers" className="back-btn group">
+          <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-1" />
+          <span>Back to Browsers</span>
+        </Link>
+      </div>
 
-        <Link className="back-link" to="/dashboard/debian/browsers"><ArrowLeft size={14} /> All browser guides</Link>
-
-        <section className="guide-hero">
-          <div className="guide-title-group">
+      {/* Guide Hero Header */}
+      <div className="glass-card p-6 sm:p-8 rounded-2xl mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
             <BrandLogo slug={guide.logo} color={guide.color} name={guide.name} />
             <div>
-              <div className="guide-kicker"><span>DEBIAN INSTALL GUIDE</span><i /> REVIEWED {guide.lastVerified}</div>
-              <h1>{guide.name}</h1>
-              <p>{guide.description}</p>
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-400 mb-1">
+                <span>DEBIAN</span>
+                <i>•</i>
+                <span>{guide.installMethod}</span>
+              </div>
+              <h1 className="chrome-title text-2xl sm:text-3xl font-extrabold">{guide.name}</h1>
+              <p className="chrome-subtext text-xs sm:text-sm mt-1 max-w-xl">{guide.description}</p>
             </div>
           </div>
-          <div className="guide-hero-actions">
-            <button className={`guide-favorite-button${isFavorite ? " is-favorite" : ""}`} onClick={toggleFavorite} aria-pressed={isFavorite}>
-              <Star size={15} fill={isFavorite ? "currentColor" : "none"} />
-              {isFavorite ? "Saved" : "Save guide"}
+
+          <div className="flex items-center gap-2.5 self-end sm:self-center">
+            <button
+              onClick={toggleFavorite}
+              className={`px-3 py-2 rounded-xl text-xs font-medium border transition-all flex items-center gap-1.5 ${
+                isFavorite
+                  ? "border-amber-400/40 bg-amber-400/10 text-amber-300"
+                  : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20"
+              }`}
+            >
+              <Star size={14} className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
+              <span>{isFavorite ? "Saved" : "Save"}</span>
             </button>
-            <a className="button button-quiet guide-official-link" href={guide.officialUrl} target="_blank" rel="noreferrer">
-              Official website <ArrowUpRight size={14} />
+            <a
+              href={guide.officialUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-2 rounded-xl text-xs font-medium border border-white/10 bg-white/5 text-slate-300 hover:border-white/20 transition-all flex items-center gap-1.5"
+            >
+              <span>Official Site</span>
+              <ArrowUpRight size={14} />
             </a>
           </div>
-        </section>
-
-        <div className="guide-status-line">
-          <span className="guide-status-check"><Check size={13} /></span>
-          <span>Debian compatible</span>
-          <i />
-          <span>{guide.installMethod}</span>
-          <i />
-          <a href={guide.documentationUrl} target="_blank" rel="noreferrer">Source: {guide.documentationLabel} <ArrowUpRight size={12} /></a>
         </div>
 
-        <div className="guide-callout guide-safety-callout">
-          <ShieldCheck size={18} />
-          <div>
-            <strong>Nothing runs from this page.</strong>
-            <p>Commands are only displayed and copied. Read each step first; commands using <code>sudo</code> make system-level changes.</p>
-          </div>
-        </div>
-
-        {guide.caution && (
-          <div className="guide-callout guide-warning-callout">
-            <CircleAlert size={17} />
-            <div><strong>Before you begin</strong><p>{guide.caution}</p></div>
-          </div>
-        )}
-
-        <div className="guide-workspace">
-          <section className="guide-steps-column" aria-labelledby="installation-steps-heading">
-            <div className="guide-steps-header">
-              <div>
-                <span className="eyebrow">INSTALLATION</span>
-                <h2 id="installation-steps-heading">Follow the steps</h2>
-                <p>Run each command in order. A step only counts when you mark it complete.</p>
-              </div>
-              <button className={`copy-procedure-button${copied ? " is-copied" : ""}`} onClick={copyProcedure}>
-                {copied ? <Check size={15} /> : <Copy size={15} />}
-                {copied ? "Copied" : "Copy all commands"}
-              </button>
-            </div>
-
-            <div className="checklist-progress" aria-live="polite">
-              <div className="checklist-progress-label"><span><ClipboardCheck size={14} /> Installation checklist</span><strong>{completedCount} of {guide.steps.length} complete</strong></div>
-              <div className="checklist-progress-track"><span style={{ width: `${(completedCount / guide.steps.length) * 100}%` }} /></div>
-              {completedCount > 0 && <button className="checklist-reset" onClick={resetChecklist}><RotateCcw size={12} /> Reset checklist</button>}
-            </div>
-
-            <div className="guide-step-list">
-              {guide.steps.map((step, index) => {
-                const stepKey = String(index);
-                const isComplete = Boolean(completed[stepKey]);
-                return (
-                  <motion.article
-                    className={`guide-step${isComplete ? " is-complete" : ""}`}
-                    key={`${guide.slug}-${step.title}`}
-                    initial={{ opacity: 0, y: 9 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: Math.min(index * 0.035, 0.18) }}
-                  >
-                    <div className="guide-step-rail">
-                      <span className="guide-step-number">{String(index + 1).padStart(2, "0")}</span>
-                      {index < guide.steps.length - 1 && <span className="guide-step-connector" />}
-                    </div>
-                    <div className="guide-step-content">
-                      <div className="guide-step-heading-row">
-                        <div><h3>{step.title}</h3><p>{step.description}</p></div>
-                        <label className="step-complete-toggle">
-                          <input
-                            type="checkbox"
-                            checked={isComplete}
-                            onChange={(event) => setCompleted((current) => ({ ...current, [stepKey]: event.target.checked }))}
-                          />
-                          <span className="step-checkbox" aria-hidden="true"><Check size={12} /></span>
-                          <span className="step-toggle-text">{isComplete ? "Done" : "Mark done"}</span>
-                        </label>
-                      </div>
-                      <TerminalBlock command={step.command} />
-                      {step.note && <p className="guide-step-note"><CircleAlert size={13} /> {step.note}</p>}
-                    </div>
-                  </motion.article>
-                );
-              })}
-            </div>
-
-            <section className="guide-uninstall-section">
-              <div>
-                <span className="eyebrow">OPTIONAL</span>
-                <h2>Remove {guide.shortName}</h2>
-                <p>This removes the browser package. It does not remove personal profile data.</p>
-              </div>
-              <TerminalBlock command={guide.uninstallCommand} />
-            </section>
-
-            <section className="guide-troubleshooting">
-              <div className="guide-section-title"><div><span className="eyebrow">IF SOMETHING GOES WRONG</span><h2>Common checks</h2></div></div>
-              {guide.troubleshooting.map((item) => (
-                <details className="troubleshooting-item" key={item.title}>
-                  <summary>{item.title}</summary>
-                  <div className="troubleshooting-body">
-                    <p>{item.body}</p>
-                    {item.command && <TerminalBlock command={item.command} compact />}
-                  </div>
-                </details>
-              ))}
-            </section>
-          </section>
-
-          <aside className="guide-details-column" aria-label="Installation guide details">
-            <div className="guide-details-panel">
-              <div className="guide-details-heading"><span>GUIDE DETAILS</span><ShieldCheck size={16} /></div>
-              <dl>
-                <div><dt>Distribution</dt><dd>Debian</dd></div>
-                <div><dt>Debian versions</dt><dd>{guide.supportedDebian}</dd></div>
-                <div><dt>Architecture</dt><dd>{guide.architectures}</dd></div>
-                <div><dt>Install method</dt><dd>{guide.installMethod}</dd></div>
-                <div><dt>Last verified</dt><dd>{guide.lastVerified}</dd></div>
-              </dl>
-              <div className="guide-detail-links">
-                <a href={guide.officialUrl} target="_blank" rel="noreferrer">Official website <ArrowUpRight size={13} /></a>
-                <a href={guide.documentationUrl} target="_blank" rel="noreferrer">Installation source <ArrowUpRight size={13} /></a>
-              </div>
-            </div>
-            <div className="guide-side-note">
-              <span className="guide-side-note-icon"><ShieldCheck size={15} /></span>
-              <p>Use packages from the vendor or Debian archive. Never disable APT signature checks to resolve an install error.</p>
-            </div>
-            <Link className="guide-back-browsers" to="/dashboard/debian/browsers"><ArrowLeft size={14} /> Browse other browsers</Link>
-          </aside>
+        <div className="flex flex-wrap items-center gap-4 mt-6 pt-5 border-t border-white/10 text-xs text-slate-400 font-mono">
+          <span className="flex items-center gap-1.5 text-emerald-400">
+            <ShieldCheck size={14} /> Verified for Debian 12 (Bookworm) & 11 (Bullseye)
+          </span>
+          <span>•</span>
+          <span>Package: <code className="text-slate-300">{guide.packageName}</code></span>
         </div>
       </div>
-    </DebianWorkspace>
+
+      {/* Guide Content: Steps & Details */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="chrome-heading text-lg font-bold">Installation Procedure</h2>
+              <p className="chrome-subtext text-xs">Run each verified command in your terminal sequentially.</p>
+            </div>
+            <button
+              onClick={copyProcedure}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium border border-white/15 bg-white/5 text-slate-200 hover:bg-white/10 flex items-center gap-1.5 transition-all"
+            >
+              <ClipboardCheck size={14} />
+              <span>Copy All Steps</span>
+            </button>
+          </div>
+
+          {/* Checklist progress */}
+          <div className="glass-panel p-3.5 rounded-xl mb-6">
+            <div className="flex items-center justify-between text-xs text-slate-300 mb-2 font-mono">
+              <span>Steps Completed</span>
+              <span>{completedCount} / {guide.steps.length}</span>
+            </div>
+            <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+              <div
+                className="h-full bg-emerald-400 rounded-full transition-all duration-300"
+                style={{ width: `${(completedCount / guide.steps.length) * 100}%` }}
+              />
+            </div>
+            {completedCount > 0 && (
+              <button
+                onClick={resetChecklist}
+                className="mt-2 text-[11px] text-slate-400 hover:text-white flex items-center gap-1 font-mono transition-colors"
+              >
+                <RotateCcw size={11} /> Reset checklist
+              </button>
+            )}
+          </div>
+
+          {/* Steps List */}
+          <div className="space-y-6">
+            {guide.steps.map((step, index) => {
+              const stepIndexStr = String(index);
+              const isStepDone = !!completed[stepIndexStr];
+              return (
+                <div key={index} className="glass-card p-5 rounded-2xl">
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono text-xs font-bold ${
+                        isStepDone
+                          ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                          : "bg-white/5 text-slate-400 border border-white/10"
+                      }`}>
+                        {index + 1}
+                      </span>
+                      <div>
+                        <h3 className="chrome-heading text-sm font-semibold">{step.title}</h3>
+                        <p className="chrome-subtext text-xs mt-0.5">{step.description}</p>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={isStepDone}
+                        onChange={(e) =>
+                          setCompleted((cur) => ({ ...cur, [stepIndexStr]: e.target.checked }))
+                        }
+                        className="rounded border-white/20 text-emerald-500 focus:ring-0 focus:ring-offset-0 bg-white/5"
+                      />
+                      <span>Done</span>
+                    </label>
+                  </div>
+
+                  <TerminalBlock command={step.command} label={`STEP ${index + 1}`} />
+
+                  {step.note && (
+                    <div className="mt-2.5 flex items-start gap-1.5 text-[11px] text-amber-300/90 font-mono">
+                      <CircleAlert size={12} className="mt-0.5 flex-shrink-0" />
+                      <span>{step.note}</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Uninstall Section */}
+          <div className="glass-card p-5 rounded-2xl mt-8">
+            <h2 className="chrome-heading text-sm font-bold mb-1">How to Uninstall</h2>
+            <p className="chrome-subtext text-xs mb-3">To completely remove {guide.name} and purge its configurations:</p>
+            <TerminalBlock command={guide.uninstallCommand} label="UNINSTALL" />
+          </div>
+        </div>
+
+        {/* Sidebar Details Panel */}
+        <div className="lg:col-span-1">
+          <div className="glass-card p-5 rounded-2xl sticky top-6">
+            <h3 className="text-xs font-mono text-slate-400 font-bold uppercase tracking-wider mb-4 pb-2 border-b border-white/10 flex items-center justify-between">
+              <span>Package Summary</span>
+              <Check size={14} className="text-emerald-400" />
+            </h3>
+
+            <dl className="space-y-3.5 text-xs">
+              <div>
+                <dt className="text-slate-400 text-[11px]">Browser</dt>
+                <dd className="chrome-heading font-semibold mt-0.5">{guide.name}</dd>
+              </div>
+              <div>
+                <dt className="text-slate-400 text-[11px]">Install Source</dt>
+                <dd className="text-slate-200 mt-0.5">{guide.installMethod}</dd>
+              </div>
+              <div>
+                <dt className="text-slate-400 text-[11px]">Package Name</dt>
+                <dd className="font-mono text-slate-200 mt-0.5">{guide.packageName}</dd>
+              </div>
+              <div>
+                <dt className="text-slate-400 text-[11px]">Binary Execution Command</dt>
+                <dd className="font-mono text-emerald-400 mt-0.5">{guide.binaryCommand}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
