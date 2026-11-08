@@ -107,6 +107,10 @@ export function GitHubAuthButton() {
                   onClick={() => {
                     setMenuOpen(false);
                     logout();
+                    localStorage.removeItem("lsc_dashboard_unlocked");
+                    localStorage.removeItem("lsc_condition_starred");
+                    localStorage.removeItem("lsc_condition_followed");
+                    window.location.href = "/signin";
                   }}
                   className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-rose-500/20 transition-colors cursor-pointer"
                 >

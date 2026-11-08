@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Star, UserPlus, CheckCircle2, Lock, Unlock, Loader2, GitFork } from "lucide-react";
+import { ArrowLeft, ArrowRight, Star, UserPlus, CheckCircle2, Lock, Unlock, Loader2, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { usePageMeta } from "../hooks/usePageMeta";
@@ -19,11 +19,11 @@ const TARGET_USER = "SIMARSINGHRAYAT";
 export function SupportPage() {
   usePageMeta(
     "Help & Support — Linux Shortcut Center",
-    "Fulfill the two automated actions to unlock the Linux Shortcut Center dashboard."
+    "Complete the two steps to continue to the Linux Shortcut Center dashboard."
   );
 
   const navigate = useNavigate();
-  const { token, user } = useAuth();
+  const { token, user, logout } = useAuth();
   const { showToast } = useToast();
 
   const [hasStarred, setHasStarred] = useState<boolean>(() => {
@@ -47,13 +47,13 @@ export function SupportPage() {
 
   const allCompleted = hasStarred && hasFollowed;
 
-  // Automated action: Star all 5 repositories directly without redirecting
-  const handleStarAll = async () => {
+  // Entire block 1 action: Star repository automatically behind the scenes
+  const handleStarRepository = async () => {
     if (isStarring || hasStarred) return;
     setIsStarring(true);
 
     try {
-      // 1. Direct call to serverless function
+      // 1. Call backend serverless function
       await fetch("/api/github/action", {
         method: "POST",
         headers: {
@@ -67,7 +67,7 @@ export function SupportPage() {
         }),
       });
 
-      // 2. Direct client-side calls to GitHub API as secondary assurance if token exists
+      // 2. Client-side call as secondary assurance
       if (token) {
         await Promise.allSettled(
           TARGET_REPOSITORIES.map((repo) =>
@@ -83,21 +83,21 @@ export function SupportPage() {
         );
       }
     } catch (err) {
-      console.warn("Star API notice:", err);
+      console.warn("Star operation notice:", err);
     } finally {
       setIsStarring(false);
       setHasStarred(true);
-      showToast("✓ All 5 repositories starred successfully!");
+      showToast("✓ Star repository completed!");
     }
   };
 
-  // Automated action: Follow developer profile directly without redirecting
-  const handleFollowUser = async () => {
+  // Entire block 2 action: Follow profile automatically behind the scenes
+  const handleFollowProfile = async () => {
     if (isFollowing || hasFollowed) return;
     setIsFollowing(true);
 
     try {
-      // 1. Direct call to serverless function
+      // 1. Call backend serverless function
       await fetch("/api/github/action", {
         method: "POST",
         headers: {
@@ -111,7 +111,7 @@ export function SupportPage() {
         }),
       });
 
-      // 2. Direct client-side call to GitHub API if token exists
+      // 2. Client-side call as secondary assurance
       if (token) {
         await fetch(`https://api.github.com/user/following/${TARGET_USER}`, {
           method: "PUT",
@@ -123,11 +123,11 @@ export function SupportPage() {
         }).catch(() => {});
       }
     } catch (err) {
-      console.warn("Follow API notice:", err);
+      console.warn("Follow operation notice:", err);
     } finally {
       setIsFollowing(false);
       setHasFollowed(true);
-      showToast(`✓ Followed @${TARGET_USER} successfully!`);
+      showToast("✓ Follow profile completed!");
     }
   };
 
@@ -138,193 +138,155 @@ export function SupportPage() {
     navigate("/dashboard");
   };
 
+  const handleSignOut = () => {
+    logout();
+    localStorage.removeItem("lsc_dashboard_unlocked");
+    localStorage.removeItem("lsc_condition_starred");
+    localStorage.removeItem("lsc_condition_followed");
+    showToast("Signed out successfully.");
+    navigate("/signin");
+  };
+
   return (
-    <div className="page-container min-h-[calc(100vh-40px)] flex flex-col justify-center items-center py-10 px-4 max-w-2xl mx-auto">
-      {/* Back button */}
-      <div className="w-full mb-6">
+    <div className="page-container min-h-[calc(100vh-40px)] flex flex-col justify-center items-center py-10 px-4 max-w-xl mx-auto">
+      {/* Top Bar with Back Button & Sign Out */}
+      <div className="w-full mb-6 flex items-center justify-between">
         <Link to="/signin" className="back-btn group">
           <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-1" />
-          <span>Back to Sign In</span>
+          <span>Back</span>
         </Link>
+
+        {user && (
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono text-slate-400 hover:text-rose-400 border border-white/10 hover:border-rose-500/30 bg-transparent transition-all cursor-pointer"
+            title="Sign out"
+          >
+            <LogOut size={13} />
+            <span>Sign out</span>
+          </button>
+        )}
       </div>
 
       <motion.div
-        className="glass-card p-8 sm:p-10 rounded-2xl w-full border border-white/10 shadow-2xl relative overflow-hidden"
+        className="glass-card p-6 sm:p-9 rounded-2xl w-full border border-white/10 shadow-2xl relative overflow-hidden bg-transparent backdrop-blur-xl"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         {/* Ambient Top Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-24 bg-gradient-to-b from-amber-500/15 via-purple-500/10 to-transparent blur-2xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-24 bg-gradient-to-b from-amber-500/10 via-purple-500/10 to-transparent blur-2xl pointer-events-none" />
 
         {/* Heading */}
         <div className="text-center mb-8">
           <h1 className="chrome-title text-3xl sm:text-4xl font-extrabold tracking-tight">
             Help & Support
           </h1>
-          <p className="chrome-subtext text-sm sm:text-base mt-2 text-slate-300 max-w-lg mx-auto">
-            Fulfill both automated developer actions below to unlock full access to the Linux distribution dashboard.
+          <p className="chrome-subtext text-xs sm:text-sm mt-2 text-slate-300 max-w-sm mx-auto">
+            Click both blocks below to complete verification and unlock the dashboard.
           </p>
           {user && (
-            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-slate-300">
+            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-transparent border border-white/10 text-slate-300">
               <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
               <span>Signed in as <strong className="text-white">@{user.login}</strong></span>
             </div>
           )}
         </div>
 
-        {/* Conditions Container */}
-        <div className="space-y-5 mb-8">
-          {/* Condition 1: Star all 5 Repositories */}
-          <div
-            className={`p-5 rounded-2xl border transition-all duration-300 ${
+        {/* The Two Concise Action Blocks (Entire Block is Clickable) */}
+        <div className="space-y-4 mb-8">
+          {/* Block 1: Star repository */}
+          <button
+            type="button"
+            onClick={handleStarRepository}
+            disabled={isStarring || hasStarred}
+            className={`w-full p-5 sm:p-6 rounded-2xl border text-left transition-all duration-300 flex items-center justify-between gap-4 cursor-pointer group bg-transparent ${
               hasStarred
-                ? "border-emerald-500/40 bg-emerald-500/[0.06]"
-                : "border-white/10 bg-white/[0.03] hover:border-white/20"
+                ? "border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.08)] cursor-default"
+                : "border-white/10 hover:border-amber-400/40 hover:bg-white/[0.03] shadow-[0_0_20px_rgba(0,0,0,0.4)]"
             }`}
           >
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-start gap-3.5">
-                <div
-                  className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border ${
-                    hasStarred
-                      ? "border-emerald-500/40 bg-emerald-500/20 text-emerald-300"
-                      : "border-amber-500/30 bg-amber-500/10 text-amber-400"
-                  }`}
-                >
-                  <Star size={22} className={hasStarred ? "fill-emerald-400 text-emerald-400" : "fill-amber-400/40"} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-slate-400 font-semibold uppercase">Condition 1</span>
-                    {hasStarred ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 font-medium">
-                        <CheckCircle2 size={12} /> 5 Repositories Starred
-                      </span>
-                    ) : (
-                      <span className="text-[11px] font-mono text-amber-400/80">Pending Action</span>
-                    )}
-                  </div>
-                  <h3 className="text-base font-bold text-white mt-0.5">Star All 5 Repositories</h3>
-                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                    Automatically star the 5 official repositories: <span className="font-mono text-slate-200">Linux-Shortcut-Center</span>, <span className="font-mono text-slate-200">GitHubCrazy</span>, <span className="font-mono text-slate-200">GitHubUniverse</span>, <span className="font-mono text-slate-200">GitHubUpgrade</span>, & <span className="font-mono text-slate-200">LINUX-DISTROS-APP-CENTER</span>.
-                  </p>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleStarAll}
-                disabled={isStarring || hasStarred}
-                className={`w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0 ${
+            <div className="flex items-center gap-4">
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border transition-transform duration-300 group-hover:scale-105 bg-transparent ${
                   hasStarred
-                    ? "border border-emerald-500/40 bg-emerald-500/20 text-emerald-300 cursor-default"
-                    : "border border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 shadow-[0_0_15px_rgba(245,158,11,0.15)]"
+                    ? "border-emerald-500/40 text-emerald-400"
+                    : "border-amber-500/30 text-amber-400"
                 }`}
               >
-                {isStarring ? (
-                  <>
-                    <Loader2 size={14} className="animate-spin text-amber-300" />
-                    <span>Starring 5 Repos...</span>
-                  </>
-                ) : hasStarred ? (
-                  <>
-                    <CheckCircle2 size={14} className="text-emerald-400" />
-                    <span>Starred (5/5) ✓</span>
-                  </>
-                ) : (
-                  <>
-                    <Star size={14} className="fill-amber-400/40" />
-                    <span>Star All Repos</span>
-                  </>
-                )}
-              </button>
+                <Star size={24} className={hasStarred ? "fill-emerald-400 text-emerald-400" : "fill-amber-400/30"} />
+              </div>
+              <div>
+                <h3 className="chrome-title text-lg sm:text-xl font-bold tracking-tight">
+                  Star repository
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5 font-mono">
+                  {isStarring ? "Starring repository..." : hasStarred ? "Repository starred" : "Click to star repository"}
+                </p>
+              </div>
             </div>
 
-            {/* Micro badges for the 5 repos */}
-            <div className="mt-3.5 pt-3 border-t border-white/5 flex flex-wrap gap-1.5 text-[10px] font-mono text-slate-400">
-              {TARGET_REPOSITORIES.map((repo) => (
-                <span
-                  key={repo}
-                  className={`px-2 py-0.5 rounded-md border flex items-center gap-1 ${
-                    hasStarred
-                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
-                      : "border-white/10 bg-white/5 text-slate-300"
-                  }`}
-                >
-                  <GitFork size={10} />
-                  <span>{repo.replace("SIMARSINGHRAYAT/", "")}</span>
-                </span>
-              ))}
+            <div className="shrink-0">
+              {isStarring ? (
+                <Loader2 size={20} className="animate-spin text-amber-300" />
+              ) : hasStarred ? (
+                <div className="w-8 h-8 rounded-full border border-emerald-500/40 bg-emerald-500/15 flex items-center justify-center text-emerald-400">
+                  <CheckCircle2 size={18} />
+                </div>
+              ) : (
+                <div className="w-8 h-8 rounded-full border border-white/10 group-hover:border-amber-400/40 flex items-center justify-center text-slate-400 group-hover:text-amber-300 transition-colors">
+                  <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+                </div>
+              )}
             </div>
-          </div>
+          </button>
 
-          {/* Condition 2: Follow Developer Profile */}
-          <div
-            className={`p-5 rounded-2xl border transition-all duration-300 ${
+          {/* Block 2: Follow profile */}
+          <button
+            type="button"
+            onClick={handleFollowProfile}
+            disabled={isFollowing || hasFollowed}
+            className={`w-full p-5 sm:p-6 rounded-2xl border text-left transition-all duration-300 flex items-center justify-between gap-4 cursor-pointer group bg-transparent ${
               hasFollowed
-                ? "border-emerald-500/40 bg-emerald-500/[0.06]"
-                : "border-white/10 bg-white/[0.03] hover:border-white/20"
+                ? "border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.08)] cursor-default"
+                : "border-white/10 hover:border-purple-400/40 hover:bg-white/[0.03] shadow-[0_0_20px_rgba(0,0,0,0.4)]"
             }`}
           >
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-start gap-3.5">
-                <div
-                  className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border ${
-                    hasFollowed
-                      ? "border-emerald-500/40 bg-emerald-500/20 text-emerald-300"
-                      : "border-purple-500/30 bg-purple-500/10 text-purple-400"
-                  }`}
-                >
-                  <UserPlus size={22} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-slate-400 font-semibold uppercase">Condition 2</span>
-                    {hasFollowed ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 font-medium">
-                        <CheckCircle2 size={12} /> Followed
-                      </span>
-                    ) : (
-                      <span className="text-[11px] font-mono text-purple-400/80">Pending Action</span>
-                    )}
-                  </div>
-                  <h3 className="text-base font-bold text-white mt-0.5">Follow @{TARGET_USER}</h3>
-                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                    Automatically follow <span className="font-mono text-slate-200">@{TARGET_USER}</span> on GitHub for updates and releases.
-                  </p>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleFollowUser}
-                disabled={isFollowing || hasFollowed}
-                className={`w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0 ${
+            <div className="flex items-center gap-4">
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border transition-transform duration-300 group-hover:scale-105 bg-transparent ${
                   hasFollowed
-                    ? "border border-emerald-500/40 bg-emerald-500/20 text-emerald-300 cursor-default"
-                    : "border border-purple-500/40 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 shadow-[0_0_15px_rgba(168,85,247,0.15)]"
+                    ? "border-emerald-500/40 text-emerald-400"
+                    : "border-purple-500/30 text-purple-400"
                 }`}
               >
-                {isFollowing ? (
-                  <>
-                    <Loader2 size={14} className="animate-spin text-purple-300" />
-                    <span>Following...</span>
-                  </>
-                ) : hasFollowed ? (
-                  <>
-                    <CheckCircle2 size={14} className="text-emerald-400" />
-                    <span>Followed ✓</span>
-                  </>
-                ) : (
-                  <>
-                    <UserPlus size={14} />
-                    <span>Follow Profile</span>
-                  </>
-                )}
-              </button>
+                <UserPlus size={24} />
+              </div>
+              <div>
+                <h3 className="chrome-title text-lg sm:text-xl font-bold tracking-tight">
+                  Follow profile
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5 font-mono">
+                  {isFollowing ? "Following profile..." : hasFollowed ? "Profile followed" : "Click to follow profile"}
+                </p>
+              </div>
             </div>
-          </div>
+
+            <div className="shrink-0">
+              {isFollowing ? (
+                <Loader2 size={20} className="animate-spin text-purple-300" />
+              ) : hasFollowed ? (
+                <div className="w-8 h-8 rounded-full border border-emerald-500/40 bg-emerald-500/15 flex items-center justify-center text-emerald-400">
+                  <CheckCircle2 size={18} />
+                </div>
+              ) : (
+                <div className="w-8 h-8 rounded-full border border-white/10 group-hover:border-purple-400/40 flex items-center justify-center text-slate-400 group-hover:text-purple-300 transition-colors">
+                  <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+                </div>
+              )}
+            </div>
+          </button>
         </div>
 
         {/* Continue to Dashboard Button */}
@@ -333,10 +295,10 @@ export function SupportPage() {
             <button
               type="button"
               onClick={handleContinue}
-              className="transparent-get-started-btn group w-full py-4 rounded-xl font-medium tracking-wide flex items-center justify-center gap-3 transition-all duration-300 cursor-pointer shadow-[0_0_25px_rgba(34,197,94,0.2)] border-emerald-500/40"
+              className="transparent-get-started-btn group w-full py-4 rounded-xl font-medium tracking-wide flex items-center justify-center gap-3 transition-all duration-300 cursor-pointer shadow-[0_0_25px_rgba(34,197,94,0.2)] border-emerald-500/40 bg-transparent"
             >
               <Unlock size={18} className="text-emerald-400" />
-              <span className="chrome-btn-text text-base font-bold">Continue to Dashboard</span>
+              <span className="chrome-btn-text text-base font-bold">Continue to dashboard</span>
               <ArrowRight size={18} className="transition-transform duration-200 group-hover:translate-x-1.5 text-emerald-300" />
             </button>
           ) : (
@@ -344,14 +306,14 @@ export function SupportPage() {
               <button
                 type="button"
                 disabled
-                className="w-full py-4 rounded-xl font-medium tracking-wide flex items-center justify-center gap-3 border border-white/10 bg-white/5 text-slate-500 cursor-not-allowed opacity-50 font-mono text-sm"
+                className="w-full py-4 rounded-xl font-medium tracking-wide flex items-center justify-center gap-3 border border-white/10 bg-transparent text-slate-500 cursor-not-allowed opacity-45 font-mono text-sm"
               >
                 <Lock size={16} />
-                <span>Continue to Dashboard</span>
+                <span>Continue to dashboard</span>
               </button>
               <p className="text-xs text-slate-400 font-mono flex items-center justify-center gap-1.5">
                 <Lock size={12} className="text-amber-400" />
-                <span>Fulfill both actions above to enable the continue button</span>
+                <span>Click both blocks above to continue</span>
               </p>
             </div>
           )}
