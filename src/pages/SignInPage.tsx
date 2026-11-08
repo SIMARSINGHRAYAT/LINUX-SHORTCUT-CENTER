@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { GitHubLogo } from "../components/OfficialLogos";
@@ -15,10 +15,18 @@ export function SignInPage() {
   const { user, loginWithGitHub } = useAuth();
   const navigate = useNavigate();
 
-  // If already signed in, automatically proceed to Help & Support
+  // If already signed in, check if tasks were already completed
   useEffect(() => {
     if (user) {
-      navigate("/support", { replace: true });
+      const hasStarred = localStorage.getItem("lsc_condition_starred") === "true";
+      const hasFollowed = localStorage.getItem("lsc_condition_followed") === "true";
+      const isUnlocked = localStorage.getItem("lsc_dashboard_unlocked") === "true";
+
+      if (hasStarred && hasFollowed && isUnlocked) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/support", { replace: true });
+      }
     }
   }, [user, navigate]);
 
@@ -34,7 +42,7 @@ export function SignInPage() {
 
       {/* Main Sign In Glass Card */}
       <motion.div
-        className="glass-card p-8 sm:p-10 rounded-2xl w-full text-center border border-white/10 shadow-2xl relative overflow-hidden"
+        className="glass-card p-8 sm:p-12 rounded-2xl w-full text-center border border-white/10 shadow-2xl relative overflow-hidden bg-transparent backdrop-blur-xl"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -52,31 +60,15 @@ export function SignInPage() {
           Sign In with GitHub
         </h1>
 
-        <p className="chrome-subtext text-sm sm:text-base mt-3 text-slate-300 max-w-md mx-auto leading-relaxed">
-          Authenticate with your GitHub account to access the Linux Shortcut Center, verify software packages, and unlock the distribution dashboard.
+        <p className="chrome-subtext text-sm sm:text-base mt-3 mb-8 text-slate-300 max-w-md mx-auto leading-relaxed">
+          Authenticate with your GitHub account to access the Linux Shortcut Center and unlock the distribution dashboard.
         </p>
-
-        {/* Benefits list */}
-        <div className="my-7 py-4 border-y border-white/10 text-left text-xs sm:text-sm text-slate-300 space-y-2.5 font-mono">
-          <div className="flex items-center gap-2.5 text-emerald-400">
-            <ShieldCheck size={16} className="shrink-0" />
-            <span>Verified Debian 13 software repository access</span>
-          </div>
-          <div className="flex items-center gap-2.5 text-sky-400">
-            <ShieldCheck size={16} className="shrink-0" />
-            <span>Seamless integration with Linux App Center</span>
-          </div>
-          <div className="flex items-center gap-2.5 text-purple-400">
-            <ShieldCheck size={16} className="shrink-0" />
-            <span>1-Click terminal commands for 10 AI desktop applications</span>
-          </div>
-        </div>
 
         {/* ONLY Action Button: Sign in with GitHub */}
         <button
           type="button"
           onClick={loginWithGitHub}
-          className="transparent-get-started-btn group w-full py-4 rounded-xl font-medium tracking-wide flex items-center justify-center gap-3 transition-all duration-300 cursor-pointer shadow-[0_0_25px_rgba(255,255,255,0.06)]"
+          className="transparent-get-started-btn group w-full py-4 rounded-xl font-medium tracking-wide flex items-center justify-center gap-3 transition-all duration-300 cursor-pointer shadow-[0_0_25px_rgba(255,255,255,0.06)] bg-transparent"
         >
           <GitHubLogo size={20} />
           <span className="chrome-btn-text text-base font-bold">Sign in with GitHub</span>

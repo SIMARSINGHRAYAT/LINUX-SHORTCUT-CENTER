@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Star, UserPlus, CheckCircle2, Lock, Unlock, Loader2, LogOut } from "lucide-react";
+import { ArrowLeft, ArrowRight, Star, UserPlus, CheckCircle2, Lock, Unlock, Loader2, LogOut, ShieldCheck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { usePageMeta } from "../hooks/usePageMeta";
@@ -36,7 +36,9 @@ export function SupportPage() {
 
   const [isStarring, setIsStarring] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
 
+  // Synchronize localStorage with state
   useEffect(() => {
     localStorage.setItem("lsc_condition_starred", hasStarred ? "true" : "false");
   }, [hasStarred]);
@@ -46,6 +48,64 @@ export function SupportPage() {
   }, [hasFollowed]);
 
   const allCompleted = hasStarred && hasFollowed;
+
+  // Automatically check if tasks were completed before on GitHub or locally
+  useEffect(() => {
+    if (allCompleted) {
+      localStorage.setItem("lsc_dashboard_unlocked", "true");
+      return;
+    }
+
+    // Active background verification via GitHub API if access token is available
+    if (token) {
+      setIsVerifying(true);
+
+      const checkStarred = fetch(
+        `https://api.github.com/user/starred/${TARGET_REPOSITORIES[0]}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+        }
+      )
+        .then((res) => {
+          if (res.status === 204) {
+            setHasStarred(true);
+            localStorage.setItem("lsc_condition_starred", "true");
+          }
+        })
+        .catch(() => {});
+
+      const checkFollowed = fetch(
+        `https://api.github.com/user/following/${TARGET_USER}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+        }
+      )
+        .then((res) => {
+          if (res.status === 204) {
+            setHasFollowed(true);
+            localStorage.setItem("lsc_condition_followed", "true");
+          }
+        })
+        .catch(() => {});
+
+      Promise.allSettled([checkStarred, checkFollowed]).finally(() => {
+        setIsVerifying(false);
+      });
+    }
+  }, [token, allCompleted]);
+
+  // If both are completed, ensure unlocked flag is active
+  useEffect(() => {
+    if (allCompleted) {
+      localStorage.setItem("lsc_dashboard_unlocked", "true");
+    }
+  }, [allCompleted]);
 
   // Entire block 1 action: Star repository automatically behind the scenes
   const handleStarRepository = async () => {
@@ -192,6 +252,14 @@ export function SupportPage() {
               <span>Signed in as <strong className="text-white">@{user.login}</strong></span>
             </div>
           )}
+
+          {/* Verification Status Pill */}
+          {allCompleted && (
+            <div className="mt-3.5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">
+              <ShieldCheck size={14} className="text-emerald-400" />
+              <span>Verification complete — Dashboard access unlocked</span>
+            </div>
+          )}
         </div>
 
         {/* The Two Concise Action Blocks (Entire Block is Clickable) */}
@@ -218,11 +286,22 @@ export function SupportPage() {
                 <Star size={24} className={hasStarred ? "fill-emerald-400 text-emerald-400" : "fill-amber-400/30"} />
               </div>
               <div>
-                <h3 className="chrome-title text-lg sm:text-xl font-bold tracking-tight">
-                  Star repository
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="chrome-title text-lg sm:text-xl font-bold tracking-tight">
+                    Star repository
+                  </h3>
+                  {hasStarred && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                      Yes
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-slate-400 mt-0.5 font-mono">
-                  {isStarring ? "Starring repository..." : hasStarred ? "Repository starred" : "Click to star repository"}
+                  {isStarring
+                    ? "Starring repository..."
+                    : hasStarred
+                    ? "Repository starred"
+                    : "Click to star repository"}
                 </p>
               </div>
             </div>
@@ -264,11 +343,22 @@ export function SupportPage() {
                 <UserPlus size={24} />
               </div>
               <div>
-                <h3 className="chrome-title text-lg sm:text-xl font-bold tracking-tight">
-                  Follow profile
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="chrome-title text-lg sm:text-xl font-bold tracking-tight">
+                    Follow profile
+                  </h3>
+                  {hasFollowed && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                      Yes
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-slate-400 mt-0.5 font-mono">
-                  {isFollowing ? "Following profile..." : hasFollowed ? "Profile followed" : "Click to follow profile"}
+                  {isFollowing
+                    ? "Following profile..."
+                    : hasFollowed
+                    ? "Profile followed"
+                    : "Click to follow profile"}
                 </p>
               </div>
             </div>
