@@ -1,26 +1,26 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { GitHubLogo } from "../components/OfficialLogos";
 import { usePageMeta } from "../hooks/usePageMeta";
-import { useToast } from "../components/ToastProvider";
 
 export function SignInPage() {
   usePageMeta(
     "Sign in with GitHub — Linux Shortcut Center",
-    "Sign in with your GitHub account to unlock the Linux Shortcut Center dashboard."
+    "Sign in with your GitHub account to access the Linux Shortcut Center."
   );
 
-  const { user, loginWithGitHub, demoLogin } = useAuth();
+  const { user, loginWithGitHub } = useAuth();
   const navigate = useNavigate();
-  const { showToast } = useToast();
 
-  const handleDemo = () => {
-    demoLogin();
-    showToast("Signed in with Demo GitHub Account!");
-    navigate("/support");
-  };
+  // If already signed in, automatically proceed to Help & Support
+  useEffect(() => {
+    if (user) {
+      navigate("/support", { replace: true });
+    }
+  }, [user, navigate]);
 
   return (
     <div className="page-container min-h-[calc(100vh-40px)] flex flex-col justify-center items-center py-10 px-4 max-w-xl mx-auto">
@@ -72,51 +72,16 @@ export function SignInPage() {
           </div>
         </div>
 
-        {/* Action Button: Sign In or Continue */}
-        {user ? (
-          <div className="space-y-4">
-            <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center gap-3">
-              <img
-                src={user.avatar_url}
-                alt={user.login}
-                className="w-8 h-8 rounded-full border border-emerald-400/50"
-              />
-              <div className="text-left font-mono">
-                <span className="text-xs text-emerald-300 font-semibold block">Signed in as @{user.login}</span>
-                <span className="text-[11px] text-slate-400">Authentication active</span>
-              </div>
-            </div>
-
-            <Link
-              to="/support"
-              className="transparent-get-started-btn group w-full py-3.5 rounded-xl font-medium tracking-wide flex items-center justify-center gap-2 transition-all duration-300"
-            >
-              <span className="chrome-btn-text text-sm sm:text-base font-bold">Continue to Help & Support</span>
-              <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
-            </Link>
-          </div>
-        ) : (
-          <div className="space-y-3.5">
-            <button
-              type="button"
-              onClick={loginWithGitHub}
-              className="transparent-get-started-btn group w-full py-4 rounded-xl font-medium tracking-wide flex items-center justify-center gap-3 transition-all duration-300 cursor-pointer"
-            >
-              <GitHubLogo size={20} />
-              <span className="chrome-btn-text text-sm sm:text-base font-bold">Sign in with GitHub</span>
-              <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
-            </button>
-
-            <button
-              type="button"
-              onClick={handleDemo}
-              className="w-full py-2.5 rounded-xl text-xs font-mono text-purple-300 hover:text-white border border-purple-500/25 bg-purple-500/10 hover:bg-purple-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <Sparkles size={14} />
-              <span>Quick Test with Demo Account</span>
-            </button>
-          </div>
-        )}
+        {/* ONLY Action Button: Sign in with GitHub */}
+        <button
+          type="button"
+          onClick={loginWithGitHub}
+          className="transparent-get-started-btn group w-full py-4 rounded-xl font-medium tracking-wide flex items-center justify-center gap-3 transition-all duration-300 cursor-pointer shadow-[0_0_25px_rgba(255,255,255,0.06)]"
+        >
+          <GitHubLogo size={20} />
+          <span className="chrome-btn-text text-base font-bold">Sign in with GitHub</span>
+          <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
+        </button>
       </motion.div>
     </div>
   );

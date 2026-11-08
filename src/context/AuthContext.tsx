@@ -84,9 +84,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     sessionStorage.setItem("lsc_auth_return_url", "/support");
 
     if (clientId) {
+      const scopes = "read:user,user:email,public_repo,user:follow";
       const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(
         clientId
-      )}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=read:user,user:email`;
+      )}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}`;
       window.location.href = authUrl;
     } else {
       // Use Vercel Serverless Function which securely accesses GITHUB_CLIENT_ID
