@@ -77,7 +77,7 @@ export function DebianDashboard() {
             Artificial Intelligence
           </h2>
           <p className="chrome-subtext text-sm leading-relaxed mb-6">
-            Local LLM runtimes, AI development tools, coding agents, and machine learning framework shortcuts for Debian.
+            Install 10 AI desktop applications on Debian 13 (ChatGPT, Claude, Grok, Gemini, Perplexity, Copilot, Meta AI, Qwen, Kimi, DeepSeek) with verified step-by-step terminal commands.
           </p>
 
           <div className="flex items-center text-purple-400 group-hover:text-purple-300 text-sm font-semibold gap-2 mt-auto">

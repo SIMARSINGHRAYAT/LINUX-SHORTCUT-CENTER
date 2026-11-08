@@ -9,6 +9,7 @@ import { DistributionDashboard } from "./pages/DistributionDashboard";
 import { InstallationGuide } from "./pages/InstallationGuide";
 import { LandingPage } from "./pages/LandingPage";
 import { AILibrary } from "./pages/AILibrary";
+import { AIGuide } from "./pages/AIGuide";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 function Application() {
@@ -52,6 +53,7 @@ function Application() {
               <Route path="/dashboard/debian/browsers" element={<BrowserLibrary />} />
               <Route path="/dashboard/debian/browsers/:browserSlug" element={<InstallationGuide />} />
               <Route path="/dashboard/debian/ai" element={<AILibrary />} />
+              <Route path="/dashboard/debian/ai/:aiSlug" element={<AIGuide />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </motion.div>
