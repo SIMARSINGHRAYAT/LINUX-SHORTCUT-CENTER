@@ -1,127 +1,133 @@
 <div align="center">
 
-# ⚡ Linux Shortcut Center
+<img src="assets/logo.png" alt="Linux Shortcut Center Logo" width="160" />
 
-<img src="assets/logo.png" alt="Linux Shortcut Center Logo" width="220" />
-
-<p align="center">
-  <strong>The ultimate verified command & desktop software hub for modern Linux distributions.</strong>
-  <br />
-  <em>One centralized launchpad. Zero fluff. 100% verified terminal commands.</em>
-</p>
+# Linux Shortcut Center
 
 <p align="center">
-  <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center"><img src="https://img.shields.io/github/stars/SIMARSINGHRAYAT/Linux-Shortcut-Center?style=for-the-badge&logo=github&color=6366F1&labelColor=0B0F19" alt="GitHub Stars" /></a>
-  <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/fork"><img src="https://img.shields.io/github/forks/SIMARSINGHRAYAT/Linux-Shortcut-Center?style=for-the-badge&logo=github&color=8B5CF6&labelColor=0B0F19" alt="Forks" /></a>
-  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 19" /></a>
-  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite_7-646CFF?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite 7" /></a>
-  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" /></a>
-  <a href="https://www.debian.org/"><img src="https://img.shields.io/badge/Debian_13-D70A53?style=for-the-badge&logo=debian&logoColor=white" alt="Debian 13 Verified" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge&labelColor=0B0F19" alt="License" /></a>
+  <em>Your centralized command hub for verified Linux terminal shortcuts, web browsers, and AI desktop apps.</em>
 </p>
 
-[**Explore Live**](https://linuxdesktopapps11.vercel.app/) • [**Report an Issue**](https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/issues) • [**Request App**](https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/pulls)
+<!-- Tags / Badges -->
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge&labelColor=0d1117" alt="License" /></a>
+  <a href="https://linuxdesktopapps11.vercel.app/"><img src="https://img.shields.io/badge/Deployed-Live-0ea5e9?style=for-the-badge&logo=vercel&labelColor=0d1117" alt="Deployed" /></a>
+  <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/pulls"><img src="https://img.shields.io/badge/Contributions-Welcome-22c55e?style=for-the-badge&labelColor=0d1117" alt="Contributions Welcome" /></a>
+  <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center"><img src="https://img.shields.io/github/stars/SIMARSINGHRAYAT/Linux-Shortcut-Center?style=for-the-badge&logo=github&color=eab308&labelColor=0d1117" alt="Stars" /></a>
+  <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/network/members"><img src="https://img.shields.io/github/forks/SIMARSINGHRAYAT/Linux-Shortcut-Center?style=for-the-badge&logo=github&color=8b5cf6&labelColor=0d1117" alt="Forks" /></a>
+  <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/discussions"><img src="https://img.shields.io/badge/Discussions-Join-a855f7?style=for-the-badge&logo=github&labelColor=0d1117" alt="Discussions" /></a>
+  <a href="https://youtube.com/@kilzsnippet?si=LdSGhAJfDFgytQQY"><img src="https://img.shields.io/badge/YouTube-KilzSnippet-red?style=for-the-badge&logo=youtube&labelColor=0d1117" alt="YouTube" /></a>
+</p>
+
+---
+
+### 🔥 Punch Lines
+
+> **"Stop digging through dead forum threads and broken scripts."**  
+> **"One verified command. Zero guesswork. Absolute control."**  
+> **"From a fresh Linux install to your favorite AI desktop apps in seconds."**
 
 ---
 
 </div>
 
-## 💡 What is Linux Shortcut Center?
+## 🚀 Get Started
 
-Tired of digging through fragmented StackOverflow threads, broken PPA repositories, or outdated wikis just to install your everyday desktop tools on Linux?
-
-**Linux Shortcut Center** bridges the gap between fresh operating system installations and production-ready workstations. Designed with an ultra-modern cyber-glassmorphism aesthetic, it offers verified, ordered, and copy-paste-ready commands tested directly on **Debian 13 (trixie, x86_64)**.
-
----
-
-## 🚀 Key Highlights
-
-<table>
-  <tr>
-    <td width="50%">
-      <h3>🤖 10 AI Desktop Apps on Debian</h3>
-      <p>Step-by-step installation guides for the top 10 AI tools: <strong>ChatGPT, Claude, Grok, Gemini, Perplexity, Copilot, Meta AI, Qwen, Kimi, and DeepSeek</strong>.</p>
-    </td>
-    <td width="50%">
-      <h3>🌐 Essential Web Browsers</h3>
-      <p>Clean, security-hardened setup procedures for <strong>Google Chrome, Firefox ESR, Brave, Microsoft Edge, Opera, and Chromium</strong>.</p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <h3>📋 1-Click Copy & Verification</h3>
-      <p>Every terminal command is tested on physical Linux installs, featuring instant copy-to-clipboard buttons and dependency safeguards.</p>
-    </td>
-    <td width="50%">
-      <h3>✨ Futuristic Cyber Glass UI</h3>
-      <p>True black contrast background layered with high-contrast grids, vibrant glossy multi-color ambient lighting, and metallic chrome typography.</p>
-    </td>
-  </tr>
-</table>
-
----
-
-## 📦 10 AI Desktop Applications at a Glance
-
-| # | Application | Publisher / Source | Installation Method |
-|---|-------------|--------------------|---------------------|
-| 1 | **ChatGPT** | OpenAI | Official `.deb` Package |
-| 2 | **Claude** | Anthropic | Signed APT Repository |
-| 3 | **Grok** | xAI / Community | Linux App Center Script & Snap Edge |
-| 4 | **Gemini** | Google / Community | Snap Store |
-| 5 | **Perplexity** | Perplexity AI / Community | Snap Store |
-| 6 | **Copilot** | Microsoft / App Center | Linux App Center Install Script |
-| 7 | **Meta AI** | Meta / App Center | Linux App Center Install Script |
-| 8 | **Qwen** | Alibaba Cloud / App Center | Linux App Center Install Script |
-| 9 | **Kimi** | Moonshot AI / App Center | Linux App Center Install Script |
-| 10 | **DeepSeek** | DeepSeek / Community | Snap Store |
-
----
-
-## 🛠️ Quick Start
-
-Experience the platform locally on your machine in under two minutes:
+Clone and run the application locally in three commands:
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center.git
 cd Linux-Shortcut-Center
-
-# 2. Install dependencies
 npm install
-
-# 3. Start development server
 npm run dev
 ```
 
-Build for production:
-```bash
-npm run build
-```
+### 📢 Spread the Word
+
+Love the project? Help us grow the Linux community by sharing it:
+
+[![Share on X](https://img.shields.io/badge/Share_on-X_(Twitter)-black?style=flat-square&logo=x)](https://twitter.com/intent/tweet?text=Check%20out%20Linux%20Shortcut%20Center%20-%20verified%20terminal%20commands%20and%2010%20AI%20desktop%20apps%20for%20Linux!&url=https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center)
+[![Share on LinkedIn](https://img.shields.io/badge/Share_on-LinkedIn-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center)
+[![Share on Reddit](https://img.shields.io/badge/Share_on-Reddit-FF4500?style=flat-square&logo=reddit)](https://reddit.com/submit?url=https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center&title=Linux%20Shortcut%20Center%20-%20Verified%20Commands%20and%20AI%20Desktop%20Apps%20for%20Linux)
 
 ---
 
-## 🖥️ Supported Linux Distributions
+## ❓ What is it?
 
-- [x] **Debian GNU/Linux** *(Active & Verified on Debian 13 trixie)*
-- [ ] **Ubuntu** *(Coming soon)*
-- [ ] **Kali Linux** *(Coming soon)*
-- [ ] **Fedora** *(Coming soon)*
-- [ ] **Linux Mint** *(Coming soon)*
-- [ ] **Arch Linux** *(Coming soon)*
+**Linux Shortcut Center** is an interactive, distraction-free command engine built for Linux developers and power users. Instead of memorizing obscure terminal flags or dealing with broken package mirrors, you get verified step-by-step instructions tested directly on **Debian 13 (trixie, x86_64)**.
 
 ---
 
-## 👥 Author & Community
+## 💖 Support & Monetization
 
-Crafted with ❤️ by **[@SIMAR SINGH RAYAT](https://github.com/SIMARSINGHRAYAT)**
+If this project saved you time or helped configure your system, consider supporting the development:
 
-- 🌐 **Linux App Center**: [linuxdesktopapps11.vercel.app](https://linuxdesktopapps11.vercel.app/)
-- 💻 **Source Repository**: [SIMARSINGHRAYAT/LINUX-DESKTOP-APPS](https://github.com/SIMARSINGHRAYAT/LINUX-DESKTOP-APPS)
-- ⭐ **Support the Project**: If you find this useful, consider giving this repository a star!
+<p align="left">
+  <a href="https://buymeacoffee.com/simarsinghrayat" target="_blank"><img src="https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee" /></a>
+  <a href="https://github.com/sponsors/SIMARSINGHRAYAT" target="_blank"><img src="https://img.shields.io/badge/Sponsor_on-GitHub-ea4aaa?style=for-the-badge&logo=github-sponsors&logoColor=white" alt="Sponsor on GitHub" /></a>
+  <a href="https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center"><img src="https://img.shields.io/badge/Star_This_Repo-⭐-yellow?style=for-the-badge" alt="Star Repo" /></a>
+</p>
+
+---
+
+## 📺 Video Tutorials & YouTube Channel
+
+Want to watch video walkthroughs on how to install and configure these apps? Check out my official YouTube channel:
+
+▶️ **[Subscribe to @kilzsnippet on YouTube](https://youtube.com/@kilzsnippet?si=LdSGhAJfDFgytQQY)**
+
+Watch in-depth guides, Linux workflow tutorials, and desktop setups.
+
+---
+
+## 💬 Join the Discussion
+
+Have questions, suggestions, or an app you want added? Join our community conversations:
+
+👉 [**GitHub Discussions: Linux Shortcut Center**](https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/discussions)
+
+---
+
+## ✨ Features
+
+- 🤖 **10 AI Desktop Apps on Debian 13**: Complete guides for **ChatGPT, Claude, Grok, Gemini, Perplexity, Copilot, Meta AI, Qwen, Kimi, and DeepSeek**.
+- 🌐 **Web Browser Library**: Hardened installation guides for **Chrome, Firefox ESR, Brave, Edge, Opera, and Chromium**.
+- 📋 **1-Click Copy Buttons**: Every terminal command has an instant copy button with clipboard confirmation.
+- 🎨 **Minimal Cyber-Glass UI**: High-contrast black grid background, ambient glossy colors, and chrome metallic typography.
+- 🛡️ **100% Native & Safe**: No remote scripts executed silently in your browser—all commands run locally in your terminal.
+
+---
+
+## ⚙️ How it Works
+
+1. **Choose your Linux distribution** *(Debian 13 active, Ubuntu, Kali, Fedora, Mint, Arch coming soon)*.
+2. **Select your category** *(Browsers or Artificial Intelligence)*.
+3. **Pick an app & copy the verified command** directly into your terminal.
+
+---
+
+## 🛠️ Built with Modern Tech
+
+- **Framework**: [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Bundler**: [Vite 7](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [Lucide Icons](https://lucide.dev/) + Authentic Vector SVGs
+
+---
+
+## 🤝 Community & Support
+
+We welcome contributions from the community!
+
+- 🐛 [**Open an Issue**](https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/issues) — Report a bug or command error.
+- 🔀 [**Submit a Pull Request**](https://github.com/SIMARSINGHRAYAT/Linux-Shortcut-Center/pulls) — Add an app, fix a step, or improve styling.
+- 🌐 [**Linux App Center**](https://linuxdesktopapps11.vercel.app/) — Visit our companion web portal.
+
+`#linux` `#debian` `#ai-apps` `#chatgpt` `#claude` `#deepseek` `#terminal-shortcuts` `#opensource` `#react` `#vite`
 
 ---
 
 <div align="center">
-  <sub>© 2026 Linux Shortcut Center. Commands are designed for local execution in user terminals.</sub>
+  <sub><strong>Linux Shortcut Center</strong> — Built with passion for the Linux community.</sub>
 </div>
