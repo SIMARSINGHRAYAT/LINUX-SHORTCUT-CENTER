@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { ArrowLeft, ArrowUpRight, Check, CircleAlert, ClipboardCheck, ExternalLink, HelpCircle, Info, RotateCcw, ShieldCheck, Terminal, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Check, CheckCircle2, CircleAlert, ClipboardCheck, ExternalLink, HelpCircle, Info, RotateCcw, ShieldCheck, Terminal, Trash2 } from "lucide-react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { aiApps, snapPrerequisiteSteps, appCenterPrerequisiteSteps, type AIStep } from "../data/aiApps";
 import { AIAppIcon } from "../components/AILogos";
+import { GitHubLogo } from "../components/OfficialLogos";
 import { TerminalBlock } from "../components/TerminalBlock";
 import { useClipboard } from "../hooks/useClipboard";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { useToast } from "../components/ToastProvider";
+import { useAuth } from "../context/AuthContext";
 
 export function AIGuide() {
   const { aiSlug = "" } = useParams();
@@ -16,6 +18,7 @@ export function AIGuide() {
   const [showAppCenterPrereq, setShowAppCenterPrereq] = useState(false);
   const { copy } = useClipboard();
   const { showToast } = useToast();
+  const { user, loginWithGitHub } = useAuth();
 
   usePageMeta(
     app ? `How to Install ${app.name} on Debian 13` : "AI Application Guide",
@@ -153,6 +156,21 @@ export function AIGuide() {
                 <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                   The Linux App Center gives you a ready-made install command for Grok, Copilot, Meta AI, Qwen and Kimi. You sign in once with GitHub; after that you go straight to the app list.
                 </p>
+                {user ? (
+                  <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono">
+                    <CheckCircle2 size={13} />
+                    <span>Signed in as @{user.login} (GitHub Connected)</span>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={loginWithGitHub}
+                    className="mt-2.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono bg-sky-500/15 border border-sky-500/30 text-sky-200 hover:bg-sky-500/25 transition-colors cursor-pointer"
+                  >
+                    <GitHubLogo size={13} />
+                    <span>Sign in with GitHub</span>
+                  </button>
+                )}
               </div>
             </div>
             <button

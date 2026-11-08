@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { ToastProvider } from "./components/ToastProvider";
+import { AuthProvider } from "./context/AuthContext";
+import { GitHubAuthButton } from "./components/GitHubAuthButton";
 import { BackgroundGlow } from "./components/BackgroundGlow";
 import { BrowserLibrary } from "./pages/BrowserLibrary";
 import { DebianDashboard } from "./pages/DebianDashboard";
@@ -10,6 +12,7 @@ import { InstallationGuide } from "./pages/InstallationGuide";
 import { LandingPage } from "./pages/LandingPage";
 import { AILibrary } from "./pages/AILibrary";
 import { AIGuide } from "./pages/AIGuide";
+import { AuthCallback } from "./pages/AuthCallback";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 function Application() {
@@ -35,6 +38,9 @@ function Application() {
       {/* Universal Background: Full black contrast with grid and glossy professional colors */}
       <BackgroundGlow />
 
+      {/* Persistent floating GitHub OAuth Account Action */}
+      <GitHubAuthButton />
+
       {/* Main Content Area without any top header or sidebar */}
       <main id="main-content" className="site-main relative z-10 min-h-screen flex flex-col justify-start">
         <AnimatePresence mode="wait" initial={false}>
@@ -54,6 +60,7 @@ function Application() {
               <Route path="/dashboard/debian/browsers/:browserSlug" element={<InstallationGuide />} />
               <Route path="/dashboard/debian/ai" element={<AILibrary />} />
               <Route path="/dashboard/debian/ai/:aiSlug" element={<AIGuide />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </motion.div>
@@ -65,10 +72,12 @@ function Application() {
 
 export default function App() {
   return (
-    <ToastProvider>
-      <BrowserRouter>
-        <Application />
-      </BrowserRouter>
-    </ToastProvider>
+    <AuthProvider>
+      <ToastProvider>
+        <BrowserRouter>
+          <Application />
+        </BrowserRouter>
+      </ToastProvider>
+    </AuthProvider>
   );
 }

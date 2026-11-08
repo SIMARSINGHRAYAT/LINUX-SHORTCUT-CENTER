@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/logo.png" alt="Linux Shortcut Center Logo" width="160" />
+<img src="assets/icon.png" alt="Linux Shortcut Center Logo" width="160" />
 
 # Linux Shortcut Center
 
@@ -92,9 +92,42 @@ Have questions, suggestions, or an app you want added? Join our community conver
 
 - 🤖 **10 AI Desktop Apps on Debian 13**: Complete guides for **ChatGPT, Claude, Grok, Gemini, Perplexity, Copilot, Meta AI, Qwen, Kimi, and DeepSeek**.
 - 🌐 **Web Browser Library**: Hardened installation guides for **Chrome, Firefox ESR, Brave, Edge, Opera, and Chromium**.
+- 🔑 **GitHub OAuth Authentication**: Direct 1-click GitHub Sign-In with live user profile, status verification, and token exchange powered by Vercel serverless functions.
 - 📋 **1-Click Copy Buttons**: Every terminal command has an instant copy button with clipboard confirmation.
 - 🎨 **Minimal Cyber-Glass UI**: High-contrast black grid background, ambient glossy colors, and chrome metallic typography.
 - 🛡️ **100% Native & Safe**: No remote scripts executed silently in your browser—all commands run locally in your terminal.
+
+---
+
+## ⚡ Vercel Deployment & GitHub OAuth Setup
+
+Deploy **Linux Shortcut Center** to Vercel in minutes with full GitHub OAuth support:
+
+### 1. Create a GitHub OAuth App
+1. Go to [GitHub Developer Settings → OAuth Apps](https://github.com/settings/developers).
+2. Click **New OAuth App**.
+3. Fill in:
+   - **Application name**: `Linux Shortcut Center`
+   - **Homepage URL**: `https://<your-project-name>.vercel.app` (or `http://localhost:5173` for local dev)
+   - **Authorization callback URL**: `https://<your-project-name>.vercel.app/auth/callback` (or `http://localhost:5173/auth/callback`)
+4. Click **Register application**.
+5. Copy your **Client ID** and generate a new **Client Secret**.
+
+### 2. Configure Environment Variables in Vercel
+In your Vercel Project Dashboard (**Settings → Environment Variables**), add:
+
+| Key | Value | Target |
+|---|---|---|
+| `VITE_GITHUB_CLIENT_ID` | `Your GitHub OAuth Client ID` | Production, Preview, Development |
+| `GITHUB_CLIENT_ID` | `Your GitHub OAuth Client ID` | Production, Preview, Development |
+| `GITHUB_CLIENT_SECRET` | `Your GitHub OAuth Client Secret` | Production, Preview, Development |
+
+### 3. Deploy
+- Connect this GitHub repository to [Vercel](https://vercel.com/new).
+- Framework Preset: **Vite**
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Click **Deploy**! Every push to `main` automatically triggers a zero-downtime deployment.
 
 ---
 
