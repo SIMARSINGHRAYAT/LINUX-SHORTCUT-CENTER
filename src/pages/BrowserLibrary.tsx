@@ -1,6 +1,6 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { ArrowLeft, Search, SlidersHorizontal, Star } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BrowserCard } from "../components/BrowserCard";
 import { browsers } from "../data/browsers";
 import { usePersistentState } from "../hooks/usePersistentState";
@@ -9,14 +9,17 @@ import { usePageMeta } from "../hooks/usePageMeta";
 type BrowserFilter = "all" | "saved" | "Debian archive" | "Vendor repository" | "Official .deb";
 
 export function BrowserLibrary() {
+  const isUbuntu = useLocation().pathname.startsWith("/dashboard/ubuntu");
+  const basePath = isUbuntu ? "/dashboard/ubuntu" : "/dashboard/debian";
+  const distroName = isUbuntu ? "Ubuntu" : "Debian";
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<BrowserFilter>("all");
   const [favorites, setFavorites] = usePersistentState<string[]>("shortcut-favorite-guides", []);
   const methods: BrowserFilter[] = ["all", "saved", "Debian archive", "Vendor repository", "Official .deb"];
 
   usePageMeta(
-    "Debian Web Browsers",
-    "Verified browser installation guides and shortcuts for Debian Linux."
+    `${distroName} Web Browsers`,
+    `Verified browser installation guides and shortcuts for ${distroName} Linux.`
   );
 
   const visibleBrowsers = useMemo(() => {
@@ -45,7 +48,7 @@ export function BrowserLibrary() {
     <div className="page-container browser-library-page py-10 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Back button */}
       <div>
-        <Link to="/dashboard/debian" className="back-btn group">
+        <Link to={basePath} className="back-btn group">
           <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-1" />
           <span>Back</span>
         </Link>
@@ -56,7 +59,7 @@ export function BrowserLibrary() {
           Web Browsers
         </h1>
         <p className="chrome-subtext text-sm sm:text-base mt-2 text-slate-300">
-          Install and configure verified web browsers on Debian Linux using step-by-step terminal commands.
+          Install and configure verified web browsers on {distroName} Linux using step-by-step terminal commands.
         </p>
       </div>
 

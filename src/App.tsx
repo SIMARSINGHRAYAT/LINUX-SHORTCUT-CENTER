@@ -7,6 +7,7 @@ import { GitHubAuthButton } from "./components/GitHubAuthButton";
 import { BackgroundGlow } from "./components/BackgroundGlow";
 import { BrowserLibrary } from "./pages/BrowserLibrary";
 import { DebianDashboard } from "./pages/DebianDashboard";
+import { UbuntuDashboard } from "./pages/UbuntuDashboard";
 import { DistributionDashboard } from "./pages/DistributionDashboard";
 import { InstallationGuide } from "./pages/InstallationGuide";
 import { LandingPage } from "./pages/LandingPage";
@@ -60,10 +61,15 @@ function Application() {
               <Route path="/support" element={<SupportPage />} />
               <Route path="/dashboard" element={<DistributionDashboard />} />
               <Route path="/dashboard/debian" element={<DebianDashboard />} />
+              <Route path="/dashboard/ubuntu" element={<UbuntuDashboard />} />
               <Route path="/dashboard/debian/browsers" element={<BrowserLibrary />} />
               <Route path="/dashboard/debian/browsers/:browserSlug" element={<InstallationGuide />} />
+              <Route path="/dashboard/ubuntu/browsers" element={<BrowserLibrary />} />
+              <Route path="/dashboard/ubuntu/browsers/:browserSlug" element={<InstallationGuide />} />
               <Route path="/dashboard/debian/ai" element={<AILibrary />} />
               <Route path="/dashboard/debian/ai/:aiSlug" element={<AIGuide />} />
+              <Route path="/dashboard/ubuntu/ai" element={<AILibrary />} />
+              <Route path="/dashboard/ubuntu/ai/:aiSlug" element={<AIGuide />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>

@@ -35,7 +35,7 @@ export function OSCard({ distribution }: { distribution: Distribution }) {
       <div className="os-card-footer">
         {available ? (
           <span className="os-card-action">
-            <span>Explore Debian</span>
+            <span>Explore {distribution.name}</span>
             <ArrowRight size={15} />
           </span>
         ) : (
@@ -49,7 +49,7 @@ export function OSCard({ distribution }: { distribution: Distribution }) {
   );
 
   return available ? (
-    <Link to="/dashboard/debian" className="os-card-link-wrapper" aria-label={`Select ${distribution.name}`}>
+    <Link to={`/dashboard/${distribution.slug}`} className="os-card-link-wrapper" aria-label={`Select ${distribution.name}`}>
       {cardContent}
     </Link>
   ) : (

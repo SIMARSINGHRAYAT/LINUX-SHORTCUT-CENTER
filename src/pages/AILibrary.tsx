@@ -1,20 +1,25 @@
 import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
-import { aiApps } from "../data/aiApps";
+import { Link, useLocation } from "react-router-dom";
+import { aiApps, ubuntuAIApps } from "../data/aiApps";
 import { AIAppIcon } from "../components/AILogos";
 import { usePageMeta } from "../hooks/usePageMeta";
 
 export function AILibrary() {
+  const isUbuntu = useLocation().pathname.startsWith("/dashboard/ubuntu");
+  const apps = isUbuntu ? ubuntuAIApps : aiApps;
+  const basePath = isUbuntu ? "/dashboard/ubuntu" : "/dashboard/debian";
+  const distroName = isUbuntu ? "Ubuntu" : "Debian";
+
   usePageMeta(
     "Artificial Intelligence",
-    "Select an AI desktop application to view verified installation steps for Debian 13."
+    `Select an AI desktop application to view verified installation steps for ${distroName}.`
   );
 
   return (
     <div className="page-container ai-library-page py-10 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Back button */}
       <div>
-        <Link to="/dashboard/debian" className="back-btn group">
+        <Link to={basePath} className="back-btn group">
           <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-1" />
           <span>Back</span>
         </Link>
@@ -29,10 +34,10 @@ export function AILibrary() {
 
       {/* 10 AI Desktop App Blocks: Official Logo and App Name */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-        {aiApps.map((app) => (
+        {apps.map((app) => (
           <Link
             key={app.slug}
-            to={`/dashboard/debian/ai/${app.slug}`}
+            to={`${basePath}/ai/${app.slug}`}
             className="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center gap-4 transition-all duration-300 hover:border-white/35 group min-h-[170px]"
           >
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center border border-white/10 bg-white/5 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.04)]">

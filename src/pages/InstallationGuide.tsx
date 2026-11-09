@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { ArrowLeft, ArrowUpRight, Check, CircleAlert, ClipboardCheck, RotateCcw, ShieldCheck, Star } from "lucide-react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { BrandLogo } from "../components/Brand";
 import { TerminalBlock } from "../components/TerminalBlock";
 import { useClipboard } from "../hooks/useClipboard";
@@ -11,6 +11,8 @@ import { useToast } from "../components/ToastProvider";
 
 export function InstallationGuide() {
   const { browserSlug = "" } = useParams();
+  const isUbuntu = useLocation().pathname.startsWith("/dashboard/ubuntu");
+  const browsersPath = isUbuntu ? "/dashboard/ubuntu/browsers" : "/dashboard/debian/browsers";
   const guide = browsers.find((browser) => browser.slug === browserSlug);
   const [favorites, setFavorites] = usePersistentState<string[]>("shortcut-favorite-guides", []);
   const [, setRecent] = usePersistentState<string[]>("shortcut-recent-guides", []);
@@ -28,7 +30,7 @@ export function InstallationGuide() {
     setRecent((current) => [guide.slug, ...current.filter((slug) => slug !== guide.slug)].slice(0, 6));
   }, [guide, setRecent]);
 
-  if (!guide) return <Navigate to="/dashboard/debian/browsers" replace />;
+  if (!guide) return <Navigate to={browsersPath} replace />;
 
   const isFavorite = favorites.includes(guide.slug);
   const completedCount = guide.steps.reduce((count, _, index) => count + (completed[String(index)] ? 1 : 0), 0);
@@ -54,7 +56,7 @@ export function InstallationGuide() {
     <div className="page-container guide-page py-10 px-4 sm:px-6 max-w-5xl mx-auto">
       {/* Back button */}
       <div>
-        <Link to="/dashboard/debian/browsers" className="back-btn group">
+        <Link to={browsersPath} className="back-btn group">
           <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-1" />
           <span>Back to Browsers</span>
         </Link>

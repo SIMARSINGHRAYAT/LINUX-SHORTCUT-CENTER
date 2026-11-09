@@ -2,10 +2,14 @@ import { ArrowLeft, ArrowRight, Bot, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { usePageMeta } from "../hooks/usePageMeta";
 
-export function DebianDashboard() {
+export function DebianDashboard({ distro = "debian" }: { distro?: "debian" | "ubuntu" }) {
+  const isUbuntu = distro === "ubuntu";
+  const basePath = `/dashboard/${distro}`;
+  const distroName = isUbuntu ? "Ubuntu" : "Debian";
+
   usePageMeta(
-    "Debian Software Library",
-    "Explore essential software categories and verified installation commands for Debian Linux."
+    `${distroName} Software Library`,
+    `Explore essential software categories and verified installation commands for ${distroName} Linux.`
   );
 
   return (
@@ -21,7 +25,7 @@ export function DebianDashboard() {
       {/* Heading */}
       <div className="debian-heading mb-10">
         <h1 className="chrome-title text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">
-          Debian Software Library
+          {distroName} Software Library
         </h1>
         <p className="chrome-subtext text-sm sm:text-base mt-2 text-slate-300">
           Select a category to explore verified terminal installation shortcuts and configuration guides.
@@ -32,7 +36,7 @@ export function DebianDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Block 1: Browser */}
         <Link
-          to="/dashboard/debian/browsers"
+          to={`${basePath}/browsers`}
           className="glass-card debian-block group block p-8 rounded-2xl transition-all duration-300"
         >
           <div className="flex items-center justify-between mb-6">
@@ -49,7 +53,7 @@ export function DebianDashboard() {
             Browser
           </h2>
           <p className="chrome-subtext text-sm leading-relaxed mb-6">
-            Install and configure your favorite modern, privacy-focused, and standard web browsers on Debian Linux.
+            Install and configure your favorite modern, privacy-focused, and standard web browsers on {distroName} Linux.
           </p>
 
           <div className="flex items-center text-blue-400 group-hover:text-blue-300 text-sm font-semibold gap-2 mt-auto">
@@ -60,7 +64,7 @@ export function DebianDashboard() {
 
         {/* Block 2: Artificial Intelligence */}
         <Link
-          to="/dashboard/debian/ai"
+          to={`${basePath}/ai`}
           className="glass-card debian-block group block p-8 rounded-2xl transition-all duration-300"
         >
           <div className="flex items-center justify-between mb-6">
@@ -77,7 +81,9 @@ export function DebianDashboard() {
             Artificial Intelligence
           </h2>
           <p className="chrome-subtext text-sm leading-relaxed mb-6">
-            Install 10 AI desktop applications on Debian 13 (ChatGPT, Claude, Grok, Gemini, Perplexity, Copilot, Meta AI, Qwen, Kimi, DeepSeek) with verified step-by-step terminal commands.
+            {isUbuntu
+              ? "Install ChatGPT and Claude on Ubuntu with official step-by-step installation commands."
+              : "Install 10 AI desktop applications on Debian 13 (ChatGPT, Claude, Grok, Gemini, Perplexity, Copilot, Meta AI, Qwen, Kimi, DeepSeek) with verified step-by-step terminal commands."}
           </p>
 
           <div className="flex items-center text-purple-400 group-hover:text-purple-300 text-sm font-semibold gap-2 mt-auto">

@@ -3,6 +3,7 @@ export interface AIStep {
   description: string;
   command?: string;
   note?: string;
+  links?: { label: string; url: string }[];
 }
 
 export interface AIOption {
@@ -497,6 +498,74 @@ export const aiApps: AIAppGuide[] = [
         title: "Snap apps missing from app menu",
         body: "Restart after installing snapd (step 4) so desktop launchers appear.",
         command: "sudo reboot",
+      },
+    ],
+  },
+];
+
+export const ubuntuAIApps: AIAppGuide[] = [
+  {
+    slug: "chatgpt",
+    name: "ChatGPT",
+    installMethod: "Official .deb package",
+    methodType: "deb",
+    badgeColor: "#10a37f",
+    summary: "Install the official ChatGPT Desktop app for Ubuntu from OpenAI's .deb package.",
+    uninstallCommand: "sudo apt remove chatgpt",
+    steps: [
+      {
+        title: "Step 2. Download the official ChatGPT app",
+        description: "Open the official Linux installation guide and download the .deb package for your architecture.",
+        links: [
+          { label: "OpenAI - ChatGPT for Linux installation guide", url: "https://learn.chatgpt.com/docs/linux/linux-app?utm_source=chatgpt.com" },
+          { label: "ChatGPT Desktop for Ubuntu reference", url: "https://images.openai.com/static-rsc-4/tYBiRYiHWjdLGa_1BNIy4h_YHvq8ZZ4VMQwo04PnuOnjpLzvfyda-jPm_wLdsGYOZ_mrEDjzR68sNqRMnvXCTiUry1rA-xAtReTXefXaAYoLUxXdz7Y1KXqgg2BnnqS3QAoV5K_dCl55exgrVHNDFOVFUiF_WA1N_xwsiROWkHg?purpose=inline" },
+        ],
+        note: "Package: .deb | Architecture: AMD64 (x86_64) or ARM64 | Publisher: OpenAI",
+      },
+      {
+        title: "Step 3. Install ChatGPT",
+        description: "Once the download is complete, install the package from your Downloads folder. If your filename is different, replace chatgpt_amd64.deb with the actual filename.",
+        command: "cd ~/Downloads\nsudo apt install ./chatgpt_amd64.deb",
+      },
+      {
+        title: "Step 4. Launch ChatGPT",
+        description: "Open Ubuntu Activities, search for ChatGPT, and click the ChatGPT icon, or launch it from the terminal.",
+        command: "chatgpt",
+      },
+      {
+        title: "Step 5. Sign in",
+        description: "Open ChatGPT and sign in using your existing OpenAI account. Your conversations and account access will be available after signing in.",
+      },
+    ],
+  },
+  {
+    slug: "claude",
+    name: "Claude",
+    installMethod: "Anthropic's official APT repository",
+    methodType: "apt",
+    badgeColor: "#d97757",
+    summary: "Install Claude Desktop on Ubuntu using Anthropic's official APT repository.",
+    uninstallCommand: "sudo apt remove claude-desktop",
+    steps: [
+      {
+        title: "Step 2. Add Anthropic's official repository",
+        description: "Copy and execute these commands one by one. First, download the official signing key.",
+        command: "sudo curl -fsSLo /usr/share/keyrings/claude-desktop-archive-keyring.asc https://downloads.claude.ai/claude-desktop/key.asc",
+      },
+      {
+        title: "Step 2. Add the APT repository",
+        description: "Add Anthropic's official Claude Desktop APT repository.",
+        command: 'echo "deb [signed-by=/usr/share/keyrings/claude-desktop-archive-keyring.asc] https://downloads.claude.ai/claude-desktop/apt/stable stable main" | sudo tee /etc/apt/sources.list.d/claude-desktop.list',
+      },
+      {
+        title: "Step 3. Install Claude Desktop",
+        description: "Update the package lists and install Claude Desktop using the official installation method.",
+        command: "sudo apt update\nsudo apt install claude-desktop",
+      },
+      {
+        title: "Step 4. Launch Claude",
+        description: "Launch Claude Desktop from the terminal or the applications menu.",
+        command: "claude-desktop",
       },
     ],
   },

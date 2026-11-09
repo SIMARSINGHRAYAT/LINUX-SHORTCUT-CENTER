@@ -12,7 +12,7 @@ export const distributions: Distribution[] = [
     slug: "ubuntu",
     name: "Ubuntu",
     description: "A popular, enterprise-grade and user-friendly Linux distribution.",
-    status: "coming-soon",
+    status: "available",
     logo: "ubuntu",
     color: "#E95420",
   },

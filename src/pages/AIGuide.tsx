@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowLeft, ArrowUpRight, Check, CheckCircle2, CircleAlert, ClipboardCheck, ExternalLink, HelpCircle, Info, RotateCcw, ShieldCheck, Terminal, Trash2 } from "lucide-react";
-import { Link, Navigate, useParams } from "react-router-dom";
-import { aiApps, snapPrerequisiteSteps, appCenterPrerequisiteSteps, type AIStep } from "../data/aiApps";
+import { Link, Navigate, useLocation, useParams } from "react-router-dom";
+import { aiApps, ubuntuAIApps, snapPrerequisiteSteps, appCenterPrerequisiteSteps, type AIStep } from "../data/aiApps";
 import { AIAppIcon } from "../components/AILogos";
 import { GitHubLogo } from "../components/OfficialLogos";
 import { TerminalBlock } from "../components/TerminalBlock";
@@ -12,7 +12,11 @@ import { useAuth } from "../context/AuthContext";
 
 export function AIGuide() {
   const { aiSlug = "" } = useParams();
-  const app = aiApps.find((item) => item.slug === aiSlug);
+  const isUbuntu = useLocation().pathname.startsWith("/dashboard/ubuntu");
+  const apps = isUbuntu ? ubuntuAIApps : aiApps;
+  const basePath = isUbuntu ? "/dashboard/ubuntu" : "/dashboard/debian";
+  const distroName = isUbuntu ? "Ubuntu" : "Debian 13";
+  const app = apps.find((item) => item.slug === aiSlug);
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
   const [showSnapPrereq, setShowSnapPrereq] = useState(false);
   const [showAppCenterPrereq, setShowAppCenterPrereq] = useState(false);
@@ -21,12 +25,12 @@ export function AIGuide() {
   const { user, loginWithGitHub } = useAuth();
 
   usePageMeta(
-    app ? `How to Install ${app.name} on Debian 13` : "AI Application Guide",
-    app ? `Verified step-by-step terminal instructions to install ${app.name} on Debian 13.` : "Choose an AI application from the library."
+    app ? `How to Install ${app.name} on ${distroName}` : "AI Application Guide",
+    app ? `Verified step-by-step terminal instructions to install ${app.name} on ${distroName}.` : "Choose an AI application from the library."
   );
 
   if (!app) {
-    return <Navigate to="/dashboard/debian/ai" replace />;
+    return <Navigate to={`${basePath}/ai`} replace />;
   }
 
   // Active steps count
@@ -50,7 +54,7 @@ export function AIGuide() {
     <div className="page-container ai-guide-page py-10 px-4 sm:px-6 max-w-5xl mx-auto">
       {/* Back button */}
       <div>
-        <Link to="/dashboard/debian/ai" className="back-btn group">
+        <Link to={`${basePath}/ai`} className="back-btn group">
           <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-1" />
           <span>Back to Artificial Intelligence</span>
         </Link>
@@ -65,7 +69,7 @@ export function AIGuide() {
             </div>
             <div>
               <div className="flex items-center gap-2 text-xs font-mono text-slate-400 mb-1">
-                <span>DEBIAN 13 (TRIXIE)</span>
+                <span>{isUbuntu ? "UBUNTU" : "DEBIAN 13 (TRIXIE)"}</span>
                 <i>•</i>
                 <span>X86_64</span>
               </div>
@@ -92,7 +96,7 @@ export function AIGuide() {
         {/* Verification banner */}
         <div className="flex flex-wrap items-center gap-4 mt-6 pt-5 border-t border-white/10 text-xs text-slate-400 font-mono">
           <span className="flex items-center gap-1.5 text-emerald-400">
-            <ShieldCheck size={14} /> Verified on Debian 13 (trixie, x86_64)
+          <ShieldCheck size={14} /> Verified on {isUbuntu ? "Ubuntu" : "Debian 13 (trixie)"}
           </span>
           <span>•</span>
           <span>Installation Method: <span className="text-slate-200">{app.installMethod}</span></span>
@@ -264,6 +268,11 @@ export function AIGuide() {
                       </div>
 
                       <p className="chrome-subtext text-xs mb-3">{step.description}</p>
+                      {step.links?.map((link) => (
+                        <a key={link.url} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 mb-2">
+                          <ExternalLink size={12} /> {link.label}
+                        </a>
+                      ))}
 
                       {step.command && <TerminalBlock command={step.command} label={`COMMAND`} />}
                       {step.note && (
@@ -332,6 +341,11 @@ export function AIGuide() {
                   </div>
 
                   <p className="chrome-subtext text-xs mb-3">{step.description}</p>
+                  {step.links?.map((link) => (
+                    <a key={link.url} href={link.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 mb-2">
+                      <ExternalLink size={12} /> {link.label}
+                    </a>
+                  ))}
 
                   {step.command && <TerminalBlock command={step.command} label={`STEP ${idx + 1}`} />}
 
@@ -352,7 +366,7 @@ export function AIGuide() {
               <Trash2 size={16} className="text-rose-400" />
               <h3 className="chrome-heading text-sm font-bold text-rose-300">Uninstall {app.name}</h3>
             </div>
-            <p className="chrome-subtext text-xs mb-3">To remove {app.name} from your Debian 13 system:</p>
+            <p className="chrome-subtext text-xs mb-3">To remove {app.name} from your {distroName} system:</p>
             <TerminalBlock command={app.uninstallCommand} label="UNINSTALL" />
           </div>
 
